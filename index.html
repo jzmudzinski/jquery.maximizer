@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Skalowanie zdjęć</title>
+	<style>
+		body { background: #000;}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<img src="http://images.apple.com/iphone/gallery/images/gallery01-20100607.jpg" alt="">
+	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		$(function(){
+			$('#container').maximize({
+				resize: 'fill' 
+				// containerPadding: [20,20,20,20]
+			});
+		});
+	</script>
+</body>
+</html>
+
