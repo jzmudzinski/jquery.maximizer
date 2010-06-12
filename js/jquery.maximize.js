@@ -3,17 +3,19 @@ $.fn.maximize = function(options){
 	var config = $.extend({
 		center: 'both', //'horizontal','vertical'
 		align: 'left',
-		containerPadding: [0,0,0,0],
 		resize: 'crop' // 'fill'
 	}, options);
 	
 	return this.each(function(){
 		var img = $(this).find('img'),
+				maximized = $(this),
+				imgWrapper = maximized.find('div'),
+				padding = [parseInt(imgWrapper.css('marginTop'), 10),parseInt(imgWrapper.css('marginRight'), 10),parseInt(imgWrapper.css('marginBottom'), 10),parseInt(imgWrapper.css('marginLeft'), 10)],
 				img_ratio,
 				container_css = {},
 				img_css = {},
 				timer;
-		
+
 		container_css[config.align] = 0;
 		img_css[config.align] = 0;
 		$(this)
@@ -22,16 +24,25 @@ $.fn.maximize = function(options){
 			.hide()
 			.css($.extend({
 				position: 'absolute',
-				top: config.containerPadding[0], 
-				left: config.containerPadding[3], 
+				top: 0,
+				left: 0,
 				visibility: 'hidden'
 			}, img_css));
 
 		var resize = function(){
 			var w_h = $(window).height(),
 					w_w = $(window).width(),
-					w_ratio = w_w / w_h,
+					w_ratio,
 					img_w, img_h;
+
+			if (imgWrapper.length) {
+				imgWrapper.height(w_h - padding[0] - padding[2]);
+			}
+
+			w_h = imgWrapper.height();
+			w_w = imgWrapper.width();
+			w_ratio = w_w / w_h,
+			maximized.trigger('maximizerResize', [w_w,w_h]);
 
 			if ( config.resize == 'crop' ) {
 				if ( w_ratio > img_ratio ) {
@@ -47,20 +58,20 @@ $.fn.maximize = function(options){
 				if ( w_ratio < img_ratio ) {
 					img_w = w_w;
 					img_h = w_w / img_ratio;
-					img.width(w_w -  config.containerPadding[1] - config.containerPadding[3]).height(img_h - config.containerPadding[0] - config.containerPadding[2]);
+					img.width(w_w).height(img_h);
 				} else {
 					img_w = w_h * img_ratio;
 					img_h = w_h;
-					img.width(img_w -  config.containerPadding[1] - config.containerPadding[3]).height(w_h - config.containerPadding[0] - config.containerPadding[2]);
+					img.width(img_w).height(w_h);
 				}
 			}
 			if (config.center == 'both' || config.center == 'horizontal') {
-				img.css({left: (w_w - img_w) / 2 + config.containerPadding[3]});
+				img.css({left: (w_w - img_w) / 2});
 			}
 			if (config.center == 'both' || config.center == 'vertical') {
-				img.css({top: (w_h - img_h) / 2 + config.containerPadding[0]});
+				img.css({top: (w_h - img_h) / 2});
 			}
-			$('title').text(img.width() + ' x ' + img.height());
+			// $('title').text(img.width() + ' x ' + img.height());
 		};
 		
 		timer = setInterval(function(){
