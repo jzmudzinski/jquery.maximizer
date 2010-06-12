@@ -1,0 +1,14 @@
+#container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background: #ddd;
+}
+#imageWrapper {
+	overflow: hidden;
+	position: relative;
+	height: 200px;
+	background: #ccc;
+	margin: 45px 160px 25px 25px;
+	visibility: hidden;
+}

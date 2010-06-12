@@ -1,3 +1,9 @@
+/**
+ * jquery.maximizer - jQuery plugin for scaling images
+ * Copyright 2010 Jarek Zmudzinski
+ * Released under the MIT and GPL licenses.
+ * @requires jQuery
+ */
 ;(function($){
 
 	$.fn.maximize = function(options){
@@ -73,7 +79,6 @@
 				if (config.center == 'both' || config.center == 'vertical') {
 					img.css({top: (w_h - img_h) / 2});
 				}
-				// $('title').text(img.width() + ' x ' + img.height());
 			};
 		
 			timer = setInterval(function(){
