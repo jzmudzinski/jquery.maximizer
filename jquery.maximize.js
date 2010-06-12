@@ -16,21 +16,18 @@
 	
 		return this.each(function(){
 			var img = $(this).find('img'),
-					maximized = $(this),
-					imgWrapper = maximized.find('div'),
-					padding = [parseInt(imgWrapper.css('marginTop'), 10),parseInt(imgWrapper.css('marginRight'), 10),parseInt(imgWrapper.css('marginBottom'), 10),parseInt(imgWrapper.css('marginLeft'), 10)],
-					img_ratio,
-					container_css = {},
-					img_css = {},
-					timer;
+				maximized = $(this),
+				imgWrapper = maximized.find('div'),
+				padding = [parseInt(imgWrapper.css('marginTop'), 10),parseInt(imgWrapper.css('marginRight'), 10),parseInt(imgWrapper.css('marginBottom'), 10),parseInt(imgWrapper.css('marginLeft'), 10)],
+				img_ratio,
+				container_css = {},
+				img_css = {},
+				timer;
 
 			container_css[config.align] = 0;
 			img_css[config.align] = 0;
-			$(this)
-				.css($.extend({position: 'fixed',	top: 0, width: '100%', height: '100%', overflow: 'hidden'},container_css));
-			img
-				.hide()
-				.css($.extend({
+			$(this).css($.extend({position: 'fixed',	top: 0, width: '100%', height: '100%', overflow: 'hidden'},container_css));
+			img.hide().css($.extend({
 					position: 'absolute',
 					top: 0,
 					left: 0,
@@ -39,9 +36,9 @@
 
 			var resize = function(){
 				var w_h = $(window).height(),
-						w_w = $(window).width(),
-						w_ratio,
-						img_w, img_h;
+					w_w = $(window).width(),
+					w_ratio,
+					img_w, img_h;
 
 				if (imgWrapper.length) {
 					imgWrapper.height(w_h - padding[0] - padding[2]);
