@@ -11,6 +11,7 @@
 		var config = $.extend({
 			center: 'both', //'horizontal','vertical'
 			align: 'left',
+			zoomLimit: 0,
 			resize: 'crop' // 'fill'
 		}, options);
 	
@@ -18,7 +19,16 @@
 			var img = $(this).find('img'),
 				maximized = $(this),
 				imgWrapper = maximized.find('div'),
-				padding = [parseInt(imgWrapper.css('marginTop'), 10),parseInt(imgWrapper.css('marginRight'), 10),parseInt(imgWrapper.css('marginBottom'), 10),parseInt(imgWrapper.css('marginLeft'), 10)],
+				padding = $.map(
+					['marginTop','marginRight','marginBottom','marginLeft'], 
+					function(x){ 
+						return parseInt(imgWrapper.css(x), 10); 
+					}),
+				borders = $.map(
+					['borderTopWidth','borderRightWidth','borderBottomWidth','borderLeftWidth'], 
+					function(x){ 
+						return parseInt(img.css(x), 10); 
+					}),
 				img_ratio,
 				container_css = {},
 				img_css = {},
@@ -63,17 +73,17 @@
 					if ( w_ratio < img_ratio ) {
 						img_w = w_w;
 						img_h = w_w / img_ratio;
-						img.width(w_w).height(img_h);
+						img.width(w_w - borders[1] - borders[3]).height(img_h - borders[0] - borders[2]);
 					} else {
 						img_w = w_h * img_ratio;
 						img_h = w_h;
-						img.width(img_w).height(w_h);
+						img.width(img_w - borders[1] - borders[3]).height(w_h - borders[0] - borders[2]);
 					}
 				}
-				if (config.center == 'both' || config.center == 'horizontal') {
+				if ( $.inArray(config.center, ['both','horizontal']) != -1 ) {
 					img.css({left: (w_w - img_w) / 2});
 				}
-				if (config.center == 'both' || config.center == 'vertical') {
+				if ( $.inArray(config.center, ['both','vertical']) != -1 ) {
 					img.css({top: (w_h - img_h) / 2});
 				}
 			};

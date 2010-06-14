@@ -7,19 +7,25 @@
 		html {
 			overflow: auto;
 		}
+		img { 
+			border: 8px #fff solid;
+		}
 	</style>
+	<link rel="stylesheet" href="jquery.maximize.css" />
 </head>
 <body>
 	<div id="container">
 		<div id="imageWrapper">
-			<img src="http://images.apple.com/iphone/gallery/images/gallery01-20100607.jpg" alt="">
+			<img src="http://images.apple.com/iphone/gallery/images/gallery01-20100607.jpg" alt="" />
 		</div>
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="jquery.maximize.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		$(function(){
-			$('#container').maximize();
+			$('#container').maximize({
+				resize: 'fill'
+			});
 		});
 	</script>
 </body>
