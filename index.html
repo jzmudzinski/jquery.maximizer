@@ -26,6 +26,12 @@
 			$('#container').maximize({
 				resize: 'fill'
 			});
+			$('img').live('drop', function(e){
+				alert('drop');
+				e.preventDefault();
+				console.log('drop'); 
+				return false;
+			});
 		});
 	</script>
 </body>
