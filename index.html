@@ -10,10 +10,92 @@
 		img { 
 			border: 8px #fff solid;
 		}
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		[draggable=true] {
+		  -khtml-user-drag: element;
+		}
+		#thumbs {
+			position: fixed;
+			top: 5px;
+			z-index: 2;
+			background: rgba(255,255,255,0.2);
+			width: 100%;
+			height: 100px;
+			overflow: auto;
+		}
+		#thumbs ul {
+			list-style: none;
+			padding: 10px 0;
+			background: none;
+			margin: 0;
+			width: 2000px;
+		}
+		#thumbs ul li {
+			float: left;
+			margin: 0 10px 10px 10px;
+			padding: 0;
+			-webkit-transform: rotate(-1deg);
+			-moz-transform: rotate(-1deg);
+		}
+		#thumbs img {
+			border: none;
+			height: 60px;
+			border: 2px #fff solid;
+			-webkit-transition: 0.15s;
+			-moz-transition: 0.15s;
+		}
+		#thumbs li:nth-child(2) {
+			-webkit-transform: rotate(1deg);
+			-moz-transform: rotate(1deg);
+		}
+		#thumbs li:nth-child(3) {
+			-webkit-transform: rotate(-2deg);
+			-moz-transform: rotate(-2deg);
+		}
+		#thumbs li:nth-child(4) {
+			-webkit-transform: rotate(-1deg);
+			-moz-transform: rotate(-1deg);
+		}
+		#thumbs li.active,
+		#thumbs li:hover {
+			-webkit-transform: rotate(0);
+			-moz-transform: rotate(0);
+		}
+		#thumbs li.active img,
+		#thumbs img:hover {
+			-webkit-transform: scale(1.2);
+			-moz-transform: scale(1.2);
+		}
 	</style>
 	<link rel="stylesheet" href="jquery.maximize.css" />
 </head>
 <body>
+	<div id="thumbs">
+		<ul>
+			<li><img src="images/bw-test-pattern2.jpg" alt="" draggable="true" /></li>
+			<li><img src="http://farm2.static.flickr.com/1276/4685621123_f6ce9374c0.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4041/4692933597_55c6c64817.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4032/4694633981_0aa4408298.jpg" draggable="true" /></li>
+			<li><img src="http://farm2.static.flickr.com/1273/4692611994_b051459bdb.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4026/4689508553_de4b4032c7.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4002/4698475867_0a25fb41bf.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4037/4692424017_a31a6ffa9d.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4026/4697589377_2274350a01.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4064/4688576275_5d2110a989.jpg" draggable="true" /></li>
+			<li><img src="http://farm2.static.flickr.com/1289/4696716412_9103b1746d.jpg" draggable="true" /></li>
+			<li><img src="http://farm2.static.flickr.com/1287/4694743680_d340f8a7f2.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4049/4693292753_6ed3ac6faa.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4060/4686445350_146c7637e3.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4042/4695562267_bacd139565.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4058/4695862684_6ab8eedc76.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4021/4694035400_abbac7f5d2.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4006/4684397175_23360bca26.jpg" draggable="true" /></li>
+			<li><img src="http://farm5.static.flickr.com/4071/4699500255_8fbdb7cbfc.jpg" draggable="true" /></li>
+		</ul>
+	</div>
 	<div id="container">
 		<div id="imageWrapper">
 			<img src="images/bw-test-pattern2.jpg" alt="" />
@@ -23,14 +105,28 @@
 	<script src="jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		$(function(){
-			$('#container').maximize({
-				resize: 'fill'
-			});
-			$('img').live('drop', function(e){
-				alert('drop');
-				e.preventDefault();
-				console.log('drop'); 
-				return false;
+			$('#thumbs ul').width()
+			$('#container').maximize({resize: 'fill'});
+			$('#container')
+				.bind('dragover dragenter', function(e){
+					e.preventDefault();
+					return false;
+				})
+				.bind('drop', function(e){
+					e.preventDefault();
+					$(this).find('img').fadeOut(500, function(){
+						$(this).replaceWith('<img src="'+$('#container').data('dragged_src')+'" />');
+						$('#container').maximize({resize: 'fill'});
+					});
+					return false;
+				});
+			$('#thumbs img').live('dragstart', function(e){
+				$('#container').data('dragged_src', this.src);
+			})
+			.live('click', function(){
+				$(this).addClass('active').siblings().removeClass('active');
+				$('#container').data('dragged_src', this.src);
+				$('#container').trigger('drop');
 			});
 		});
 	</script>
