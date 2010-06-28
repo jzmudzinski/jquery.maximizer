@@ -11,7 +11,6 @@
 		var config = $.extend({
 			center: 'both', //'horizontal','vertical'
 			align: 'left',
-			zoomLimit: 0,
 			resize: 'crop' // 'fill'
 		}, options);
 	
