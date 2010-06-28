@@ -11,7 +11,6 @@
 		var config = $.extend({
 			center: 'both', //'horizontal','vertical'
 			align: 'left',
-			zoomLimit: 0,
 			resize: 'crop' // 'fill'
 		}, options);
 	
@@ -44,7 +43,7 @@
 					visibility: 'hidden'
 				}, img_css));
 
-			var resize = function(){
+			resize = function(){
 				var w_h = $(window).height(),
 					w_w = $(window).width(),
 					w_ratio,
@@ -90,14 +89,14 @@
 		
 			timer = setInterval(function(){
 				if ( img[0].complete ) {
+					clearInterval(timer);
 					img_ratio = img.width() / img.height();
 					resize();
 					maximized.trigger('beforeShow');
-					img.css({visibility: 'visible'}).fadeIn(500, 'swing');
-					clearInterval(timer);
+					img.css({visibility: 'visible'}).fadeIn(200, 'swing');
 				}
 			}, 50);
-		
+			
 			$(window).bind('resize', function(){
 				resize();
 			});

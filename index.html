@@ -1,14 +1,21 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<meta charset="utf-8">
+	<meta charset="utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<title>jquery.maximizer - image scaling plugin</title>
+	<link rel="stylesheet" href="jquery.maximize.css" />
 	<style>
 		html {
 			overflow: auto;
 		}
-		img { 
-			border: 8px #fff solid;
+		#container {
+			background: url(http://static.allegrostatic.pl/site_images/1/0/layout/logotyp.gif) no-repeat center center;
+		}
+		#container img { 
+			border: 2px #ccc solid;
+/*			-webkit-box-reflect:below 5px -webkit-gradient(linear, center top, center bottom, from(transparent), to(white));*/
+/*			-webkit-transform: skew(100,200);*/
 		}
 		body {
 			margin: 0;
@@ -21,80 +28,76 @@
 			position: fixed;
 			top: 5px;
 			z-index: 2;
-			background: rgba(255,255,255,0.2);
+			background: rgba(255,255,255,0.1);
 			width: 100%;
-			height: 100px;
-			overflow: auto;
+			height: 74px;
+			overflow: hidden;
+			text-align: center;
 		}
 		#thumbs ul {
 			list-style: none;
-			padding: 10px 0;
+			padding: 0;
 			background: none;
-			margin: 0;
-			width: 2000px;
+			display: inline-block;
+			margin: 0 auto;
 		}
 		#thumbs ul li {
 			float: left;
-			margin: 0 10px 10px 10px;
-			padding: 0;
-			-webkit-transform: rotate(-1deg);
-			-moz-transform: rotate(-1deg);
+			margin: 0;
+			padding: 2px;
 		}
 		#thumbs img {
 			border: none;
 			height: 60px;
-			border: 2px #fff solid;
-			-webkit-transition: 0.15s;
-			-moz-transition: 0.15s;
-		}
-		#thumbs li:nth-child(2) {
-			-webkit-transform: rotate(1deg);
-			-moz-transform: rotate(1deg);
-		}
-		#thumbs li:nth-child(3) {
-			-webkit-transform: rotate(-2deg);
-			-moz-transform: rotate(-2deg);
-		}
-		#thumbs li:nth-child(4) {
-			-webkit-transform: rotate(-1deg);
-			-moz-transform: rotate(-1deg);
+			padding: 0 10px;
+			cursor: pointer;
 		}
 		#thumbs li.active,
 		#thumbs li:hover {
-			-webkit-transform: rotate(0);
-			-moz-transform: rotate(0);
+			border-bottom: 1px #666 solid;
 		}
-		#thumbs li.active img,
-		#thumbs img:hover {
-			-webkit-transform: scale(1.2);
-			-moz-transform: scale(1.2);
+		#controls {
+			position: fixed;
+			top: 50%;
+			width: 100%;
+		}
+		#controls div {
+			height: 40px;
+			width: 40px;
+			background: rgba(255,255,255,0.12);
+			z-index: 3;
+			position: absolute;
+			-webkit-border-radius: 20px;
+			border-radius: 20px;
+			text-align: center;
+			font-family: Arial, Helvetica, sans-serif;
+			cursor: pointer;
+		}
+		#controls div:hover {
+			background: rgba(255,255,255,0.17);
+		}
+		#controls div span {
+			display: block;
+			padding: 12px;
+			color: #555;
+			font-size: 14px;
+		}
+		#controls .left {
+			left: 10px;
+		}
+		#controls .right {
+			right: 10px;
 		}
 	</style>
-	<link rel="stylesheet" href="jquery.maximize.css" />
 </head>
 <body>
 	<div id="thumbs">
 		<ul>
-			<li><img src="images/bw-test-pattern2.jpg" alt="" draggable="true" /></li>
-			<li><img src="http://farm2.static.flickr.com/1276/4685621123_f6ce9374c0.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4041/4692933597_55c6c64817.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4032/4694633981_0aa4408298.jpg" draggable="true" /></li>
-			<li><img src="http://farm2.static.flickr.com/1273/4692611994_b051459bdb.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4026/4689508553_de4b4032c7.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4002/4698475867_0a25fb41bf.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4037/4692424017_a31a6ffa9d.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4026/4697589377_2274350a01.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4064/4688576275_5d2110a989.jpg" draggable="true" /></li>
-			<li><img src="http://farm2.static.flickr.com/1289/4696716412_9103b1746d.jpg" draggable="true" /></li>
-			<li><img src="http://farm2.static.flickr.com/1287/4694743680_d340f8a7f2.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4049/4693292753_6ed3ac6faa.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4060/4686445350_146c7637e3.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4042/4695562267_bacd139565.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4058/4695862684_6ab8eedc76.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4021/4694035400_abbac7f5d2.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4006/4684397175_23360bca26.jpg" draggable="true" /></li>
-			<li><img src="http://farm5.static.flickr.com/4071/4699500255_8fbdb7cbfc.jpg" draggable="true" /></li>
 		</ul>
+	</div>
+	<div id="controls">
+		<div class="left"><span><</span></div>
+		<div class="right next"><span>></span></div>
 	</div>
 	<div id="container">
 		<div id="imageWrapper">
@@ -104,29 +107,52 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
 	<script>
-		$(function(){
-			$('#thumbs ul').width()
-			$('#container').maximize({resize: 'fill'});
-			$('#container')
-				.bind('dragover dragenter', function(e){
-					e.preventDefault();
-					return false;
-				})
-				.bind('drop', function(e){
-					e.preventDefault();
-					$(this).find('img').fadeOut(500, function(){
-						$(this).replaceWith('<img src="'+$('#container').data('dragged_src')+'" />');
-						$('#container').maximize({resize: 'fill'});
-					});
-					return false;
+		function changePhoto(coming){
+			$('#container').find('img').fadeOut(200, function(){
+				var cache = coming.next();
+				coming.addClass('active').siblings().removeClass('active');
+				$(this).replaceWith('<img src="'+coming.attr('data-big-one')+'" />');
+				$('#container').maximize({resize: 'fill'}).unbind('beforeShow').bind('beforeShow', function(){
+					if (cache && cache.length && !cache.data('cached')) {
+						$('body').append('<img style="display: none" src="'+cache.attr('data-big-one')+'" />');
+						cache.data('cached', 'true');
+					}
 				});
-			$('#thumbs img').live('dragstart', function(e){
-				$('#container').data('dragged_src', this.src);
-			})
-			.live('click', function(){
-				$(this).addClass('active').siblings().removeClass('active');
-				$('#container').data('dragged_src', this.src);
-				$('#container').trigger('drop');
+			});
+		}
+		$(function(){
+			$.getJSON('photos.php', function(response){
+				var tmp = '';
+				$.each(response, function(i){
+					if ( response[i] != "" ){
+						tmp = tmp + '<li data-big-one="'+response[i].replace(/_m/,'')+'"><img src="'+response[i]+'" /></li>';
+					}
+				});
+				$('#thumbs ul').html(tmp).find('li:first-child').trigger('click');
+			});
+
+			$('#thumbs li')
+				.live('click', function(){
+					var self = $(this);
+					$(this).addClass('active').siblings().removeClass('active');
+					changePhoto(self);
+				});
+			
+			$('#controls div').live('click', function(){
+				var current = $('#thumbs li.active'),
+					coming = $(this).hasClass('next') ? current.next() : current.prev();
+				if (coming.length){ changePhoto(coming); }
+			});
+			
+			$(document).bind('keyup', function(e){
+				var current = $('#thumbs li.active'),
+					coming;
+				if (e.which == 39) {
+					coming = current.next();
+				} else if (e.which == 37) {
+					coming = current.prev();
+				} 
+				if (coming && coming.length){ changePhoto(coming); }
 			});
 		});
 	</script>
