@@ -19,9 +19,6 @@
 			margin: 0;
 			padding: 0;
 		}
-		[draggable=true] {
-		  -khtml-user-drag: element;
-		}
 		#thumbs {
 			position: fixed;
 			top: 5px;
@@ -119,28 +116,38 @@
 			});
 		}
 		$(function(){
-			$.getJSON('photos.php', function(response){
-				var tmp = '';
-				$.each(response, function(i){
-					if ( response[i] != "" ){
-						tmp = tmp + '<li data-big-one="'+response[i].replace(/_m/,'')+'"><img src="'+response[i]+'" /></li>';
-					}
-				});
-				$('#thumbs ul').html(tmp).find('li:first-child').trigger('click');
-			});
 
-			$('#thumbs li')
-				.live('click', function(){
-					var self = $(this);
-					$(this).addClass('active').siblings().removeClass('active');
-					changePhoto(self);
-				});
+			$('#thumbs').delegate('li', 'click', function(){
+				var self = $(this);
+				$(this).addClass('active').siblings().removeClass('active');
+				changePhoto(self);
+			});
 			
-			$('#controls div').live('click', function(){
+			$('#controls').live('div', 'click', function(){
 				var current = $('#thumbs li.active'),
 					coming = $(this).hasClass('next') ? current.next() : current.prev();
 				if (coming.length){ changePhoto(coming); }
 			});
+
+			var tmp = '',
+				response = [
+					"images/bw-test-pattern2.jpg",
+					"http://farm5.static.flickr.com/4123/4776851193_cf368cdc18_m.jpg",
+					"http://farm5.static.flickr.com/4094/4777527479_8aaf13f04e_m.jpg",
+					"http://farm5.static.flickr.com/4082/4786622110_7a802b4fe8_m.jpg",
+					"http://farm5.static.flickr.com/4134/4792755237_384213ae5c_m.jpg",
+					"http://farm5.static.flickr.com/4119/4780103428_96d9eff32e_m.jpg",
+					"http://farm5.static.flickr.com/4143/4791394153_ba7379e352_m.jpg",
+					"http://farm5.static.flickr.com/4079/4790014614_e375094cd2_m.jpg",
+					"http://farm5.static.flickr.com/4074/4779673639_2bd5874716_m.jpg",
+					"http://farm5.static.flickr.com/4080/4785994391_753e6b8ced_m.jpg",
+				];
+			$.each(response, function(i){
+				if ( response[i] != "" ){
+					tmp = tmp + '<li data-big-one="'+response[i].replace(/_m/,'')+'"><img src="'+response[i]+'" /></li>';
+				}
+			});
+			$('#thumbs ul').html(tmp).find('li:first-child').trigger('click');
 			
 			$(document).bind('keyup', function(e){
 				var current = $('#thumbs li.active'),
