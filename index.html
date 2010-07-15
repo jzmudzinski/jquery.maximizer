@@ -25,7 +25,7 @@
 			z-index: 2;
 			background: rgba(255,255,255,0.1);
 			width: 100%;
-			height: 74px;
+			height: 70px;
 			overflow: hidden;
 			text-align: center;
 		}
@@ -102,12 +102,12 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
 	<script>
-		function changePhoto(coming){
+		function changePhoto(coming, config){
 			$('#container').find('img').fadeOut(200, function(){
 				var cache = coming.next();
 				coming.addClass('active').siblings().removeClass('active');
 				$(this).replaceWith('<img src="'+coming.attr('data-big-one')+'" />');
-				$('#container').maximize({resize: 'fill'}).unbind('beforeShow').bind('beforeShow', function(){
+				$('#container').maximize($.extend({resize: 'fill'}, config)).unbind('beforeShow').bind('beforeShow', function(){
 					if (cache && cache.length && !cache.data('cached')) {
 						$('body').append('<img style="display: none" src="'+cache.attr('data-big-one')+'" />');
 						cache.data('cached', 'true');
@@ -116,17 +116,23 @@
 			});
 		}
 		$(function(){
-
+			var qs,
+				config = {};
+			try {
+				qs = window.location.href.split('?')[1].split('&');
+				$.each(qs, function (e, i) { config[this.split('=')[0]] = this.split('=')[1]});
+			} catch(e) {}
+			
 			$('#thumbs').delegate('li', 'click', function(){
 				var self = $(this);
 				$(this).addClass('active').siblings().removeClass('active');
-				changePhoto(self);
+				changePhoto(self, config);
 			});
 			
-			$('#controls').live('div', 'click', function(){
+			$('#controls').delegate('div', 'click', function(){
 				var current = $('#thumbs li.active'),
 					coming = $(this).hasClass('next') ? current.next() : current.prev();
-				if (coming.length){ changePhoto(coming); }
+				if (coming.length){ changePhoto(coming, config); }
 			});
 
 			var tmp = '',
@@ -157,7 +163,7 @@
 				} else if (e.which == 37) {
 					coming = current.prev();
 				} 
-				if (coming && coming.length){ changePhoto(coming); }
+				if (coming && coming.length){ changePhoto(coming, config); }
 			});
 		});
 	</script>
