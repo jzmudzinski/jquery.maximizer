@@ -73,6 +73,10 @@ jQuery(function ($) {
               img_w = config.maxWidth;
             }
             img_h = (img_w / img_size.ratio) - borders[0] - borders[2];
+            if (config.maxHeight > 0 && img_h > config.maxHeight) {
+              img_h = config.maxHeight;
+              img_w = img_h * img_size.ratio;
+            }
           } else {
             img_h = w_h - borders[0] - borders[2];
             if (config.zoomInLimit > 0 && img_h > img_size.height * config.zoomInLimit) {
@@ -82,6 +86,10 @@ jQuery(function ($) {
               img_h = config.maxHeight;
             }
             img_w = (img_h * img_size.ratio) - borders[1] - borders[3];
+            if (config.maxWidth > 0 && img_w > config.maxWidth) {
+              img_w = config.maxWidth;
+              img_h = img_w / img_size.ratio;
+            }
           }
         }
         img.width(img_w).height(img_h);
@@ -117,8 +125,8 @@ jQuery(function ($) {
     center: 'both', //'horizontal','vertical'
     align: 'left',
     resize: 'crop', // 'fill'
-    zoomInLimit: 2, // works with {resize: 'fill'} only
-    maxWidth: 400, 
+    zoomInLimit: 0, // works with {resize: 'fill'} only
+    maxWidth: 0, 
     maxHeight: 0
   };
 
