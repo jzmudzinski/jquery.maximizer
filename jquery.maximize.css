@@ -5,10 +5,8 @@
 	background: #000;
 }
 #imageWrapper {
-/*	overflow: hidden;*/
 	position: relative;
 	background: #000;
-	margin: 0;
 	margin: 84px 40px 10px 40px;
 	visibility: hidden;
 }
