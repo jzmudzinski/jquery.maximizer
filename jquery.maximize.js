@@ -48,7 +48,7 @@ jQuery(function ($) {
         w_h = imgWrapper.height();
         w_w = imgWrapper.width();
         w_ratio = w_w / w_h;
-        maximized.trigger('maximizerResize', [w_w, w_h]);
+        maximized.trigger('maximizerResize.maximize', [w_w, w_h]);
 
         if (config.resize === 'crop') {
           if (w_ratio > img_size.ratio) {
@@ -97,18 +97,23 @@ jQuery(function ($) {
       };
 
       timer = setInterval(function () {
-        var w, h, r;
+        var w, h;
         if (img[0].complete) {
           w = img.width();
           h = img.height();
-          r = w / h;
-          maximized.data('img_size', {width: w, height: h, ratio: r});
-          resize();
-          maximized.trigger('beforeShow');
-          img.css({visibility: 'visible'}).fadeIn(500, function(){
-            maximized.trigger('afterShow');
-          });
-          clearInterval(timer);
+          if (h > 0 && w > 0) {
+            maximized.data('img_size', {width: w, height: h, ratio: w / h});
+            resize();
+            if (config.effect == 'fade') {
+              maximized.trigger('beforeShow');
+              img.css({visibility: 'visible'}).fadeIn(500, function(){
+                maximized.trigger('afterShow');
+              });
+            } else {
+              maximized.trigger('imageReady', [img, maximized]);
+            }
+            clearInterval(timer);
+          }
         }
       }, 50);
 
@@ -124,7 +129,8 @@ jQuery(function ($) {
     resize: 'crop', // 'fill'
     zoomInLimit: 0, // works with {resize: 'fill'} only
     maxWidth: 0, 
-    maxHeight: 0
+    maxHeight: 0,
+    effect: 'fade' // false
   };
 
 });

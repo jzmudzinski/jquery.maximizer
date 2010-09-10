@@ -100,18 +100,19 @@
 		</div>
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="jquery.maximize.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="jquery.maximize.js" type="text/javascript" charset="utf-8"></script>
 	<script>
 		function changePhoto(coming, config){
-			$('#container').find('img').fadeOut(200, function(){
+			$('#container').find('img').fadeOut(100, function(){
 				var cache = coming.next();
 				coming.addClass('active').siblings().removeClass('active');
 				$(this).replaceWith('<img src="'+coming.attr('data-big-one')+'" />');
-				$('#container').maximize($.extend({resize: 'fill'}, config)).unbind('beforeShow').bind('beforeShow', function(){
+				$('#container').maximize($.extend({resize: 'fill', effect: false}, config)).unbind('imageReady').bind('imageReady', function(e,img,container){
 					if (cache && cache.length && !cache.data('cached')) {
 						$('body').append('<img style="display: none" src="'+cache.attr('data-big-one')+'" />');
 						cache.data('cached', 'true');
 					}
+		      img.css({visibility: 'visible'}).fadeIn(100);
 				});
 			});
 		}
@@ -149,11 +150,11 @@
 					"http://farm5.static.flickr.com/4080/4785994391_753e6b8ced_m.jpg",
 				];
 			$.each(response, function(i){
-				if ( response[i] != "" ){
+				if ( response[i] && response[i] != "" ){
 					tmp = tmp + '<li data-big-one="'+response[i].replace(/_m/,'')+'"><img src="'+response[i]+'" /></li>';
 				}
 			});
-			$('#thumbs ul').html(tmp).find('li:first-child').trigger('click');
+			$($('#thumbs ul').html(tmp).find('li')[config.id || 0]).trigger('click');
 			
 			$(document).bind('keyup', function(e){
 				var current = $('#thumbs li.active'),
